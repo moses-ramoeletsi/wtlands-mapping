@@ -1,0 +1,40 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-title class="ion-text-center">Lesotho Wetlands</ion-title>
+  <h5 routerLink="/register-admin">Register Admin</h5>
+  <h5 class="register">User Registration</h5>
+
+  <form>
+    <ion-input 
+      type="emial"
+      label="First Name"
+      fill="outline"
+      class="top-margin"
+      style="color: #333;"
+      />
+      <ion-input 
+      type="emial"
+      label="Email"
+      fill="outline"
+      class="top-margin"
+      style="color: #333;"
+      />
+      <ion-input 
+      type="emial"
+      label="phone Number"
+      fill="outline"
+      class="top-margin"
+      style="color: #333;"
+      />
+      <ion-input 
+      type="paswword"
+      label="Paswword"
+      fill="outline"
+      class="top-margin"
+      style="color: #333;"
+    />
+    <ion-button color="custom" routerLink="/login">Register</ion-button>
+  </form>
+  <p>Already have an account?
+    <a routerLink="/login">Login</a>
+  </p>
+</ion-content>

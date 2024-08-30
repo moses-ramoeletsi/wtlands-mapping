@@ -1,0 +1,24 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-title class="ion-text-center">Lesotho Wetlands App</ion-title>
+  <h4 class="login">Login</h4>
+  <form>
+    <ion-input 
+      type="emial"
+      label="Email"
+      fill="outline"
+      class="top-margin"
+      style="color: #333;"
+      />
+      <ion-input 
+      type="paswword"
+      label="Paswword"
+      fill="outline"
+      class="top-margin"
+      style="color: #333;"
+    />
+    <ion-button color="custom" routerLink="/admin-dashboard">Login</ion-button>
+  </form>
+  <p>Don't have an account?
+    <a routerLink="/register-user">Create Accoun</a>
+  </p>
+</ion-content>

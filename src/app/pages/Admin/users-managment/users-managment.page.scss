@@ -1,0 +1,48 @@
+ion-content {
+    --background: #ebebeb;
+}
+ion-toolbar {
+    --background: transparent;
+    --border-width: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    text-align: center;
+    color: #333;
+}
+
+ion-item {
+--background:#ebebeb;
+}
+ion-card {
+  background: #f7f7f7;
+  border-radius: 8px;
+  border: 1px solid #227f43;
+}
+ion-card ion-item {
+  --background: #f7f7f7;
+}
+
+ion-avatar {
+  display: flex;
+  margin: 5px auto;
+  border: 1px solid #227f43;
+  align-items: center;
+  justify-content: center;
+}
+.back {
+    font-size: 24px;
+    padding: 8px;
+    border-radius: 50%;
+    background-color: #227f43;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 8px;
+  }
+
+  .userIcon {
+    height: 54px;
+    width: 48px;
+  }
+
+

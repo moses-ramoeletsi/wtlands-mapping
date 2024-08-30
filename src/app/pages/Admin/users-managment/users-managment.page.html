@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Users Managment</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-icon  class="back" name="arrow-back" routerLink="/admin-dashboard"/>
+  <!-- <ion-item  lines="none">
+  </ion-item> -->
+  
+  <div>
+    <ion-card>
+      <ion-item lines="none">
+        <ion-icon name="trash" slot="end" color="danger"/>
+      </ion-item>
+      <ion-card-content>
+        <ion-avatar>
+          <ion-icon  class="userIcon" name="person"/>
+        </ion-avatar>
+        <p>Username</p>
+        <p>User email</p>
+        <p>Phone Number</p>
+        <ion-button fill="outline" color="custom" routerLink="/users-activities">User Activities</ion-button>
+        </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

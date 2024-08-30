@@ -1,0 +1,26 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>All Feedbacks</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-icon  class="back" name="arrow-back" routerLink="/admin-dashboard"></ion-icon>
+
+  <div>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Username</ion-card-title>
+        <ion-card-subtitle>User email</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Feedback Type: Suggestion</p>
+        <p>Message: ............................................ </p>
+        <ion-item lines="none">
+          <ion-icon fill="outline" slot="end" name="trash" color="danger"></ion-icon>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+</ion-content>

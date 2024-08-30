@@ -1,0 +1,28 @@
+ion-content {
+    --background: #ebebeb;
+}
+ion-toolbar {
+    --background: transparent;
+    --border-width: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    text-align: center;
+    color: #333;
+}
+
+ion-card {
+    --background: #f7f7f7;
+    border: 8px;
+    border: 1px solid #227f43;
+}
+
+.back {
+    font-size: 24px;
+    padding: 8px;
+    border-radius: 50%;
+    background-color: #227f43;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 8px;
+  }

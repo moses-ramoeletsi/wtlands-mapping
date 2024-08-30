@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-title>Admin Page</ion-title>
+      <ion-button routerLink="/admin-profile">
+        <ion-icon slot="end" name="person" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <h4>Hello, User</h4>
+  <div>
+    <ion-card routerLink="/wetlands-managment">
+      <ion-card-content>
+        <h5>Manage Wetlands</h5>
+      </ion-card-content>
+    </ion-card>
+    <ion-card routerLink="/reports">
+      <ion-card-content>
+        <h5>Generate Report</h5>
+      </ion-card-content>
+    </ion-card>
+    <ion-card routerLink="/users-managment">
+      <ion-card-content>
+        <h5>Manage Users</h5>
+      </ion-card-content>
+    </ion-card>
+    <ion-card routerLink="/user-feedback">
+      <ion-card-content>
+        <h5>User Feedback</h5>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  
+  <p routerLink="/user-dashboard"> dashboard</p>
+</ion-content>

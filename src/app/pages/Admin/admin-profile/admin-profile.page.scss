@@ -1,0 +1,96 @@
+ion-content {
+    --background: #ebebeb;
+}
+ion-toolbar {
+    --background: transparent;
+    --border-width: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    color: #333;
+}
+ion-list {
+  background-color:#ebebeb;
+}
+ion-item {
+  --background: #ebebeb;
+  color: #333;
+}
+ion-item ion-icon {
+  color: #227f43;
+}
+ion-modal {
+  --background: transparent;
+}
+
+ion-modal ion-header ion-toolbar ion-img {
+  width: 300px;
+  display: block;
+  margin: 0 auto;
+}
+
+ion-modal ion-item ion-label {
+  color: black;
+}
+
+ion-modal ion-header ion-toolbar {
+  --background: #ebebeb;
+}
+
+ion-modal ion-content {
+  --background: #ebebeb;
+}
+
+ion-modal ion-content form {
+  padding: 20px;
+}
+
+ion-modal ion-content ion-item {
+  margin-bottom: 15px;
+}
+
+
+.back {
+    font-size: 24px;
+    padding: 8px;
+    border-radius: 50%;
+    background-color: #227f43;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 8px;
+  }
+.user-profile ion-card {
+    border-radius: 15px;
+    background-color: #f0f0f0;
+    border: 1px solid #227f43;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+ion-avatar {
+    height: 80px;
+    width: 80px;
+    display: block;
+    border: 2px solid #227f43;
+    margin: 10px auto;
+
+}
+.profile-avatar {
+    display: block;
+    border: 2px solid #227f43;
+    margin: 10px auto;
+}
+
+.avatarIcon {
+    height: 64px;
+    width: 58px;
+    
+}
+.profile-icon {
+    height: 54px;
+    width: 48px;
+}
+
+.top-margin {
+  margin-top: 10px;
+}
