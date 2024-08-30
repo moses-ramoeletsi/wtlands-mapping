@@ -1,0 +1,7 @@
+{
+  "name": "lesotho_wetlands",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
