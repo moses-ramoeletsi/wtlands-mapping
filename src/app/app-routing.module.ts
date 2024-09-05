@@ -40,7 +40,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/Admin/reports/reports.module').then( m => m.ReportsPageModule)
   },
   {
-    path: 'users-activities',
+    path: 'users-activities/:id',
     loadChildren: () => import('./pages/Admin/users-activities/users-activities.module').then( m => m.UsersActivitiesPageModule)
   },
   {

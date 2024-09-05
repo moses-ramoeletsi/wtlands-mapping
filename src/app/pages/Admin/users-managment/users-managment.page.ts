@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-users-managment',
@@ -7,7 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UsersManagmentPage implements OnInit {
 
-  constructor() { }
+  users$: Observable<any[]>;
+
+  constructor(private usersService: UsersService) {
+    this.users$ = this.usersService.getUsersWithTypeUser();
+  }
+
 
   ngOnInit() {
   }

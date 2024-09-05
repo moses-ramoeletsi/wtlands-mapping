@@ -3,39 +3,68 @@
     <ion-title>Users Activities</ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-icon class="back" name="arrow-back" routerLink="/users-managment"/>
-<div class="userActivities " >
-  <ion-row>
-    <ion-col>
-      <ion-label style="color: #333;">Saved Welands</ion-label>
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>Name</ion-card-title>
-          <ion-card-subtitle>Type</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-         <p>District Name</p>
-         <p>Location</p>
-         <p>Area</p>
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-      <ion-label style="color: #333;">User FeedBack</ion-label>
-      <ion-card>
-        <ion-card-header>
-          <ion-card-subtitle>User email</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-          <p>Feedback Type: Suggestion</p>
-          <p>Message: ............................................ </p>
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
-  </ion-row>
-</div>
+  <ion-icon class="back" name="arrow-back" routerLink="/users-managment"></ion-icon>
+  <div class="userActivities" *ngIf="userId; else noUser">
+    <ion-row>
+      <ion-col>
+        <ng-container *ngIf="(savedWetlands$ | async) as savedWetlands">
+          <p style="color: #333;">Total Saved Wetlands: {{ savedWetlands.length }}</p>
+          <div *ngIf="savedWetlands.length > 0; else noWetlands">
+            <ion-card *ngFor="let wetland of savedWetlands">
+              <ion-card-header>
+                <ion-card-title>Wetland Name: {{ wetland.wetland_name }}</ion-card-title>
+                <ion-card-subtitle>Type: {{ wetland.wetland_type }}</ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content>
+                <p>District Name: {{ wetland.district }}</p>
+                <p>Wetland Size: {{ wetland.wetland_size }}</p>
+                <p>Location Coordinates: {{ wetland.location_coordinates }}</p>
+                <p>Conservation Status: {{ wetland.conservation_status }}</p>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </ng-container>
+        <ng-template #noWetlands>
+          <ion-card>
+            <ion-card-content>
+              <p>No saved wetlands found for this user.</p>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ng-container *ngIf="(userFeedback$ | async) as userFeedback">
+          <p style="color: #333;">Total feedback: {{ userFeedback.length }}</p>
+          <div *ngIf="userFeedback.length > 0; else noFeedback">
+            <ion-card *ngFor="let feedback of userFeedback">
+              <ion-card-header>
+                <ion-card-subtitle>{{ feedback.email }}</ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content>
+                <p>Feedback Type: {{ feedback.feedBackType }}</p>
+                <p>Message: {{ feedback.message }}</p>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </ng-container>
+        <ng-template #noFeedback>
+          <ion-card>
+            <ion-card-content>
+              <p>No feedback found for this user.</p>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+      </ion-col>
+    </ion-row>
+  </div>
+  <ng-template #noUser>
+    <ion-card>
+      <ion-card-content>
+        <p>No user ID provided. Unable to load user activities.</p>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
 </ion-content>

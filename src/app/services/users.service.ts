@@ -30,13 +30,16 @@ export class UsersService {
     return this.firebaseStore.collection('users').doc(data.uid).valueChanges();
   }
 
-  // getVeterinarianDetails(uid: string): Observable<VeterinarianDetails | null> {
-  //   return this.firebaseStore.collection('users', ref => ref.where('uid', '==', uid).where('userType', '==', 'veterinarian'))
-  //     .valueChanges({ idField: 'id' })
-  //     .pipe(
-  //       map(vetArray => (vetArray.length > 0 ? vetArray[0] : null))
-  //     ) as Observable<VeterinarianDetails | null>;
-  // }
+  getUsersWithTypeUser(): Observable<any[]> {
+    return this.firebaseStore.collection('users', ref => ref.where('userType', '==', 'user'))
+      .snapshotChanges().pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data() as Record<string, any>;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        }))
+      );
+  }
   
   getUsers(): Observable<any[]> {
     return this.firebaseStore.collection('users').snapshotChanges().pipe(
@@ -63,6 +66,28 @@ export class UsersService {
   }
   getAuth() {
     return this.userAuth;
+  }
+
+  getUserSavedWetlands(userId: string): Observable<any[]> {
+    return this.firebaseStore.collection('savedWetlands', ref => ref.where('userId', '==', userId))
+      .snapshotChanges().pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data() as Record<string, any>;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        }))
+      );
+  }
+
+  getUserFeedback(userId: string): Observable<any[]> {
+    return this.firebaseStore.collection('userFeedback', ref => ref.where('userId', '==', userId))
+      .snapshotChanges().pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data() as Record<string, any>;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        }))
+      );
   }
 
 }
