@@ -13,8 +13,8 @@
           <ion-avatar class="profile-avatar">
             <ion-icon class="profile-icon" name="person" />
           </ion-avatar>
-          <h2>Admin</h2>
-          <p>adminemail.com</p>
+          <h2>{{userProfile.name}}</h2>
+          <p>{{userProfile.email}}</p>
         </ion-card-content>
       </ion-card>
     </div>
@@ -38,16 +38,16 @@
       </ion-col>
       <ion-col size="8">
         <ion-item lines="none">
-          <ion-input type="text" label="Name" labelPlacement="floating" placeholder="User1"/>
+          <ion-input type="text" label="Name" labelPlacement="floating"   [value]="userProfile.name" />
         </ion-item>
         <ion-item lines="none">
-          <ion-input type="text" label="Email" labelPlacement="floating" placeholder="user@gmail.com"/>
+          <ion-input type="text" label="Email" labelPlacement="floating" [value]="userProfile.email"/>
         </ion-item>
         <ion-item lines="none">
-          <ion-input type="text" label="Phone Number" labelPlacement="floating" placeholder="584534723"/>
+          <ion-input type="text" label="Phone Number" labelPlacement="floating" [value]="userProfile.phoneNumber"/>
         </ion-item>
         <ion-item lines="none">
-          <ion-input type="text" label="Password" labelPlacement="floating" placeholder="1234567"/>
+          <ion-input type="text" label="Password" labelPlacement="floating" [value]="userProfile.password"/>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -72,40 +72,24 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
-    <form>
-      <ion-input 
-        type="emial"
-        label="First Name"
-        fill="outline"
-        labelPlacement="floating"
-        class="top-margin"
-        style="color: #333;"
-        />
-        <ion-input 
-        type="emial"
-        label="Email"
-        fill="outline"
-        class="top-margin"
-        labelPlacement="floating"
-        style="color: #333;"
-        />
-        <ion-input 
-        type="emial"
-        label="phone Number"
-        fill="outline"
-        class="top-margin"
-        labelPlacement="floating"
-        style="color: #333;"
-        />
-        <ion-input 
-        type="paswword"
-        label="Paswword"
-        fill="outline"
-        class="top-margin"
-        labelPlacement="floating"
-        style="color: #333;"
-      />
-      <ion-button color="custom">Update</ion-button>
+    <form (ngSubmit)="updateProfile(modal)">
+      <ion-item lines="none">
+        <ion-input type="text" label="Name" fill="outline" labelPlacement="floating"
+          [(ngModel)]="userProfile.name" name="name"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-input type="email" label="Email" fill="outline" labelPlacement="floating"
+          [(ngModel)]="userProfile.email" name="email"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-input type="text" label="Phone Number" fill="outline" labelPlacement="floating"
+          [(ngModel)]="userProfile.phoneNumber" name="phoneNumber"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-input type="password" label="Password" fill="outline" labelPlacement="floating"
+          [(ngModel)]="userProfile.password" name="password"></ion-input>
+      </ion-item>
+      <ion-button type="submit" color="custom">Update</ion-button>
     </form>
   </ion-content>
 </ng-template>
