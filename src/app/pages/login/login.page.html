@@ -1,22 +1,65 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-title class="ion-text-center">Lesotho Wetlands App</ion-title>
   <h4 class="login">Login</h4>
-  <form>
-    <ion-input 
-      type="emial"
-      label="Email"
+  <form [formGroup]="loginForm" class="ion-padding">
+    <ion-input
+      class="ion-text-center"
       fill="outline"
-      class="top-margin"
-      style="color: #333;"
-      />
-      <ion-input 
-      type="paswword"
-      label="Paswword"
+      type="email"
+      placeholder="Enter Email"
+      formControlName="email"
+    ></ion-input>
+    <br />
+    <div
+      *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+    >
+      <span
+        class="error-message"
+        *ngIf="loginForm.get('email')?.errors?.['required']"
+        >Email is required.</span
+      >
+      <span
+        class="error-message"
+        *ngIf="loginForm.get('email')?.errors?.['email']"
+        >Invalid email format.</span
+      >
+    </div>
+
+    <ion-input
+      class="ion-text-center"
+      type="password"
       fill="outline"
-      class="top-margin"
-      style="color: #333;"
-    />
-    <ion-button color="custom" routerLink="/admin-dashboard">Login</ion-button>
+      placeholder="Enter password"
+      formControlName="password"
+    ></ion-input>
+   
+    <div
+      *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+    >
+      <span
+        class="error-message"
+        *ngIf="loginForm.get('password')?.errors?.['required']"
+        >Password is required.</span
+      >
+      <span
+        class="error-message"
+        *ngIf="loginForm.get('password')?.errors?.['minlength']"
+        >Password must be at least 6 characters long.</span
+      >
+      <span
+        class="error-message"
+        *ngIf="loginForm.get('password')?.errors?.['pattern']"
+        >Password must contain characters(- _ ! $).</span
+      >
+    </div>
+      <ion-button
+      class="ion-padding ion-xxl primaryColor"
+      expand="full"
+      type="submit"
+      (click)="login()"
+      >
+      Login
+    </ion-button>
   </form>
   <p>Don't have an account?
     <a routerLink="/register-user">Create Accoun</a>

@@ -32,9 +32,10 @@ trigger="open-wetlands-modal"
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
-    <form >
+    <form (ngSubmit)="addWetlandData(modal)">
 
         <ion-input
+        [(ngModel)]="wetland.wetland_name"
         name="wetland_name"
         label="Wetland Name"
         labelPlacement="floating"
@@ -45,6 +46,7 @@ trigger="open-wetlands-modal"
         style="color: #333"
         ></ion-input>
         <ion-select
+        [(ngModel)]="wetland.wetland_type"
         name="wetland_type"
         label="Wetland Type"
         fill="outline"
@@ -53,54 +55,58 @@ trigger="open-wetlands-modal"
         style="color: #333"
         placeholder="Select type"
         >
-          <ion-select-option value="Bog">Bog</ion-select-option>
-          <ion-select-option value="Fen">Fen</ion-select-option>
-          <ion-select-option value="Marsh">Marsh</ion-select-option>
-          <ion-select-option value="Swarmp">Swarmp</ion-select-option>
-        </ion-select>
-        
-        <ion-select
-        name="district"
-        label="District Name"
-        fill="outline"
-        class="top-margin"
-        labelPlacement="floating"
-        style="color: #333"
-        placeholder="Select district name"
-        >
-          <ion-select-option value="Berea">Berea</ion-select-option>
-          <ion-select-option value="Butha">Butha</ion-select-option>
-          <ion-select-option value="Leribe">Leribe</ion-select-option>
-          <ion-select-option value="Mafeteng">Mafeteng</ion-select-option>
-          <ion-select-option value="Maseru">Maseru</ion-select-option>
-          <ion-select-option value="Mohale's Hoek">Mahale's Hoek</ion-select-option>
-          <ion-select-option value="Mokhotlong">Mokhotlong</ion-select-option>
-          <ion-select-option value="Qacha's Nek">Qacha's Nek</ion-select-option>
-          <ion-select-option value="Quthing">Quthing</ion-select-option>
-          <ion-select-option value="Thaba-Tseka">Thaba-Tseka</ion-select-option>
-        </ion-select>
-        <ion-input
-        name="location"
-        label="Location"
-        fill="outline"
-        class="top-margin"
-        labelPlacement="floating"
-        style="color: #333"
-        placeholder="Enter location coordinates"
-        ></ion-input>
-        
-
-        <ion-input
-        name="wetland_size"
-        label="Wetland Size"
-        fill="outline"
-        class="top-margin"
-        labelPlacement="floating"
-        style="color: #333"
-        placeholder="Enter wetland size"
-        ></ion-input>
-        
-        <ion-select
+        <ion-select-option value="Bog">Bog</ion-select-option>
+        <ion-select-option value="Fen">Fen</ion-select-option>
+        <ion-select-option value="Marsh">Marsh</ion-select-option>
+        <ion-select-option value="Swarmp">Swarmp</ion-select-option>
+      </ion-select>
+      
+      <ion-select
+      [(ngModel)]="wetland.district"
+      name="district"
+      label="District Name"
+      fill="outline"
+      class="top-margin"
+      labelPlacement="floating"
+      style="color: #333"
+      placeholder="Select district name"
+      >
+      <ion-select-option value="Berea">Berea</ion-select-option>
+      <ion-select-option value="Butha">Butha</ion-select-option>
+      <ion-select-option value="Leribe">Leribe</ion-select-option>
+      <ion-select-option value="Mafeteng">Mafeteng</ion-select-option>
+      <ion-select-option value="Maseru">Maseru</ion-select-option>
+      <ion-select-option value="Mohale's Hoek">Mahale's Hoek</ion-select-option>
+      <ion-select-option value="Mokhotlong">Mokhotlong</ion-select-option>
+      <ion-select-option value="Qacha's Nek">Qacha's Nek</ion-select-option>
+      <ion-select-option value="Quthing">Quthing</ion-select-option>
+      <ion-select-option value="Thaba-Tseka">Thaba-Tseka</ion-select-option>
+    </ion-select>
+    <ion-input
+    [(ngModel)]="wetland.location_coordinates"
+    name="location_coordinates"
+    label="Location"
+    fill="outline"
+    class="top-margin"
+    labelPlacement="floating"
+    style="color: #333"
+    placeholder="Enter location coordinates"
+    ></ion-input>
+    
+    
+    <ion-input
+    [(ngModel)]="wetland.wetland_size"
+    name="wetland_size"
+    label="Wetland Size"
+    fill="outline"
+    class="top-margin"
+    labelPlacement="floating"
+    style="color: #333"
+    placeholder="Enter wetland size"
+    ></ion-input>
+    
+    <ion-select
+    [(ngModel)]="wetland.conservation_status"
         name="conservation_status"
         label="Conservation Status"
         fill="outline"
@@ -121,8 +127,8 @@ trigger="open-wetlands-modal"
 </ng-template>
 </ion-modal>
 
-<div>
-  <ion-card>
+<div *ngIf="wetlands.length > 0; else noWetlands">
+  <ion-card *ngFor="let wetland of wetlands">
     <ion-button
           fill="clear"
           color="danger"
@@ -131,21 +137,23 @@ trigger="open-wetlands-modal"
         View Map
     </ion-button>
     <ion-card-header>
-      <ion-card-title>Wetlands Name: Khubelu</ion-card-title>
-      <ion-card-subtitle>Type: Marsh, Bog, Swarmp, Fen</ion-card-subtitle>
+      <ion-card-title>{{wetland.wetland_name}}</ion-card-title>
+      <ion-card-subtitle>Type: {{wetland.wetland_type}}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-      <p>District Name: Makhotlong</p>
-      <p>Wetland Size: 1Osq</p>
-      <p>Location Cordinates: -2977 | 2976</p>
+      <p>District Name: {{wetland.district}}</p>
+      <p>Wetland Size: {{wetland.wetland_size}}</p>
+      <p>Location Cordinates: {{wetland.location_coordinates}}</p>
 
-      <p>Conservation Status: Public, Protected</p>
+      <p>Conservation Status: {{wetland.conservation_status}}</p>
       <ion-item lines="none">
-        <ion-button fill="outline" color="custom" (click)="editWetland(modal)">Edit</ion-button>
-        <ion-button slot="end" color="custom" >Delete</ion-button>
+        <ion-button fill="outline" color="custom" (click)="editWetlandData(wetland,modal)">Edit</ion-button>
+        <ion-button slot="end" color="custom" (click)="deleteWetlandData(wetland)">Delete</ion-button>
       </ion-item>
     </ion-card-content>
   </ion-card>
 </div>
-
+<ng-template #noWetlands>
+  <p style="color: brown">No wetland data available</p>
+</ng-template>
 </ion-content>
