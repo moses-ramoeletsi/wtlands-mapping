@@ -28,6 +28,9 @@ export class UserFeedbackService {
         }))
       );
   }
+  fetchUserFeedBack(): Observable<any[]>{
+    return this.firestore.collection('userFeedback').valueChanges();
+  }
   
   getCurrentUser() {
     return this.auth.currentUser;
