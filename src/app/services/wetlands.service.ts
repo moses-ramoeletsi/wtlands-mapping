@@ -27,12 +27,7 @@ export class WetlandsService {
   deleteWetland(wetland: any) {
     return this.firestore.collection('wetlands').doc(wetland.id).delete();
   }
-  // saveWetlandData(wetland: any) {
-  //   const docRef = this.firestore.collection('savedWetlands').doc();
-  //   const id = docRef.ref.id;
-  //   wetland.id = id;
-  //   return docRef.set(wetland);
-  // }
+
   saveWetlandData(wetland: any) {
     const docRef = this.firestore.collection('savedWetlands').doc(wetland.id);
     return docRef.set(wetland);

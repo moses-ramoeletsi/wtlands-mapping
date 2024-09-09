@@ -5,7 +5,11 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
- <ion-icon  class="back" name="arrow-back" routerLink="/admin-dashboard"></ion-icon>
+ 
+ <div style="display: flex; align-items: center; justify-content: space-between;">
+  <ion-icon class="back" name="arrow-back" routerLink="/admin-dashboard"></ion-icon>
+  <ion-button fill="outline" color="custom" routerLink="/wetlands-map">Map</ion-button>
+</div>
 
  <ion-fab
  slot="fixed"
@@ -127,12 +131,14 @@ trigger="open-wetlands-modal"
 </ng-template>
 </ion-modal>
 
+
 <div *ngIf="wetlands.length > 0; else noWetlands">
   <ion-card *ngFor="let wetland of wetlands">
     <ion-button
           fill="clear"
           color="danger"
           style="position: absolute; top: 5px; right: -5px; z-index: 10"
+          (click)="viewMap(wetland)"
         >
         View Map
     </ion-button>

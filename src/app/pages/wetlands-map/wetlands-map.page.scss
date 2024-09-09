@@ -1,0 +1,21 @@
+ion-content {
+    --background: #ebebeb;
+}
+ion-toolbar {
+    --background: transparent;
+    --border-width: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    color: #333;
+  }
+
+  .back {
+    font-size: 24px;
+    padding: 8px;
+    border-radius: 50%;
+    background-color: #227f43;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 8px;
+  }

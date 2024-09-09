@@ -71,6 +71,10 @@ const routes: Routes = [
     path: 'admin-profile',
     loadChildren: () => import('./pages/Admin/admin-profile/admin-profile.module').then( m => m.AdminProfilePageModule)
   },
+  {
+    path: 'wetlands-map',
+    loadChildren: () => import('./pages/wetlands-map/wetlands-map.module').then( m => m.WetlandsMapPageModule)
+  },
 ];
 
 @NgModule({

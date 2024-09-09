@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { AlertController, ToastController } from '@ionic/angular';
 import { UsersService } from 'src/app/services/users.service';
 import { WetlandsService } from 'src/app/services/wetlands.service';
 
@@ -26,7 +27,9 @@ export class WetlandsPage implements OnInit {
   constructor(
     private wetlandfireserivce: WetlandsService,
     private usersService: UsersService,
-    private firestore: AngularFirestore, 
+    private firestore: AngularFirestore,
+    private router: Router,
+    private alertController: AlertController, 
     private toastController: ToastController) { }
 
   ngOnInit() {
@@ -65,7 +68,7 @@ export class WetlandsPage implements OnInit {
         location_coordinates: wetland.location_coordinates,
         wetland_size: wetland.wetland_size,
         conservation_status: wetland.conservation_status,
-        savedAt: new Date() // Adding a timestamp for when the wetland was saved
+        savedAt: new Date() 
       };
 
       this.firestore.collection('savedWetlands').add(savedWetland).then(() => {
@@ -81,18 +84,45 @@ export class WetlandsPage implements OnInit {
       this.showToast('User not found!');
     }
   }
-  // saveWetland() {
-  //   if (this.currentUser) {
-  //     console.log('User Name:', this.currentUser.name);
-  //     console.log('User UID:', this.currentUser.uid);
-  //     this.showToast('Wetland saved successfully!');
-  //     // You can add further logic here for saving the wetland data
-  //   } else {
-  //     this.showToast('User not found!');
-  //   }
-  // }
-  
-  
+  viewMap(wetland: any) {
+    if (wetland.location_coordinates) {
+      let lat, lng;
+      if (typeof wetland.location_coordinates === 'string') {
+        [lat, lng] = wetland.location_coordinates.split(',').map((coord: string) => parseFloat(coord.trim()));
+      } else if (typeof wetland.location_coordinates === 'object') {
+        lat = wetland.location_coordinates.latitude;
+        lng = wetland.location_coordinates.longitude;
+      }
+
+      if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
+        this.router.navigate(['/wetlands-map'], {
+          queryParams: {
+            lat: lat,
+            lng: lng,
+            name: wetland.wetland_name,
+            district: wetland.district,
+            size: wetland.wetland_size,
+            type: wetland.wetland_type
+          }
+        });
+      } else {
+        this.showAlert('Error', 'Invalid coordinates for this wetland.');
+      }
+    } else {
+      this.showAlert('Error', 'No coordinates available for this wetland.');
+    }
+  }  
+
+  showAlert(title: string, message: string) {
+    this.alertController
+      .create({
+        header: title,
+        message: message,
+        buttons: ['OK'],
+      })
+      .then((alert) => alert.present());
+  }
+
   async showToast(message: string) {
     const toast = await this.toastController.create({
       message: message,

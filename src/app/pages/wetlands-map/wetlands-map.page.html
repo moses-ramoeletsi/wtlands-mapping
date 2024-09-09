@@ -1,0 +1,22 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-icon class="back" name="arrow-back" (click)="onBackButtonClick()"></ion-icon>
+    </ion-buttons>
+    <ion-title>{{ focusedWetland ? focusedWetland.name : 'Wetlands Map' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="map" style="width: 100%; height: 100%;"></div>
+  <ion-card *ngIf="focusedWetland" class="wetland-info">
+    <ion-card-header>
+      <ion-card-title>{{ focusedWetland.name }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Type:</strong> {{ focusedWetland.type }}</p>
+      <p><strong>District:</strong> {{ focusedWetland.district }}</p>
+      <p><strong>Size:</strong> {{ focusedWetland.size }}</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

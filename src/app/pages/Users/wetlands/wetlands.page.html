@@ -5,7 +5,10 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-icon  class="back" name="arrow-back" routerLink="/user-dashboard"></ion-icon>
+  <div style="display: flex; align-items: center; justify-content: space-between;">
+    <ion-icon class="back" name="arrow-back" routerLink="/admin-dashboard"></ion-icon>
+    <ion-button fill="outline" color="custom" routerLink="/wetlands-map">Map</ion-button>
+  </div>
 
   <div *ngIf="wetlands.length > 0; else noWetlands">
     <ion-card *ngFor="let wetland of wetlands">
@@ -13,6 +16,7 @@
             fill="clear"
             color="danger"
             style="position: absolute; top: 5px; right: -5px; z-index: 10"
+            (click)="viewMap(wetland)"
           >
           View Map
       </ion-button>
@@ -26,7 +30,7 @@
         <p>Location Cordinates: {{wetland.location_coordinates}}</p>
         <p>Conservation Status: {{wetland.conservation_status}}</p>
         
-        <ion-button (click)="saveWetland(wetland)">Save Wetland</ion-button>
+        <ion-button fill="outline" color="custom" (click)="saveWetland(wetland)"><ion-icon   color="custom" name="bookmark"></ion-icon>Save</ion-button>
       </ion-card-content>
     </ion-card>
   </div>
