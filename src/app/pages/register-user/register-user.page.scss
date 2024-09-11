@@ -1,23 +1,28 @@
 ion-content {
-    --background: #ebebeb;
+  --background: #ebebeb;
 }
+ion-input, 
+ion-select{
+  color: #333;
+}
+
 ion-title {
-    color:#333;
+  color: #333;
 }
 h5 {
-    color: #227f43;
+  color: #227f43;
 }
 a {
-    color: #227f43;
+  color: #227f43;
 }
-p{
-    color: #333;
+p {
+  color: #333;
 }
 
 .register {
-    color:#333;
-    margin-top: 20px;
+  color: #333;
+  margin-top: 20px;
 }
 .top-margin {
-    margin-top: 8px;
+  margin-top: 8px;
 }

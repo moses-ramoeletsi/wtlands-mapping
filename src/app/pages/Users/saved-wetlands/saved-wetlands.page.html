@@ -5,11 +5,10 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-item lines="none">
+  <div style="display: flex; align-items: center; justify-content: space-between;">
     <ion-icon class="back" name="arrow-back" routerLink="/user-profile"></ion-icon>
-    <p slot="end">Number of saved wetlands: {{ savedWetlands.length }}</p>
-  </ion-item>
-
+    <p style="color: #333;" slot="end">Number of saved wetlands: {{ savedWetlands.length }}</p>
+  </div>
   <div *ngIf="savedWetlands.length > 0; else noSavedWetlands">
     <ion-card *ngFor="let wetland of savedWetlands">
       <ion-card-header>
@@ -29,6 +28,10 @@
   </div>
 
   <ng-template #noSavedWetlands>
-    <p style="color: brown">No saved wetlands available.</p>
+    <ion-card>
+      <ion-card-content>
+        <p>No saved wetlands available.</p>
+      </ion-card-content>  
+    </ion-card>
   </ng-template>
 </ion-content>
