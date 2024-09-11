@@ -1,121 +1,36 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Reports</ion-title>
+    <ion-title class="ion-text-center">Reports</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-icon  class="back" name="arrow-back" routerLink="/admin-dashboard"></ion-icon>
-  <ion-segment [(ngModel)]="reportType">
-    <ion-segment-button value="wetlands">
-      <ion-label>Wetlands Data</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="user-activities">
-      <ion-label>User Activities</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-
-  <ion-card *ngIf="reportType">
-    <ion-card-header>
-      <ion-card-title>Filter Options</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label>Date Range</ion-label>
-        <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="filter.dateFrom"></ion-datetime>
-        <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="filter.dateTo"></ion-datetime>
-      </ion-item>
-      <ion-item *ngIf="reportType === 'wetlands'">
-        <ion-label>Specific Wetland</ion-label>
-        <ion-select [(ngModel)]="filter.wetlandId">
-          <ion-select-option *ngFor="let wetland of wetlands" >{{ wetland }}</ion-select-option>
-        </ion-select>
-      </ion-item>
-      <ion-item *ngIf="reportType === 'user-activities'">
-        <ion-label>Specific User</ion-label>
-        <ion-select [(ngModel)]="filter.userId">
-          <ion-select-option *ngFor="let user of users">{{ user }}</ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-button expand="full" (click)="generateReport()">Generate Report</ion-button>
-
-  <ion-card *ngIf="reportGenerated">
-    <ion-card-header>
-      <ion-card-title>Report Output</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <pre>{{ reportContent }}</pre>
-      <ion-button expand="block" (click)="downloadReport()">Download Report</ion-button>
-    </ion-card-content>
-  </ion-card>
-
-
-    <!-- exapmle 1 -->
-   <!-- <ion-segment [(ngModel)]="reportType">
-    <ion-segment-button value="wetlands">
-      <ion-label>Wetlands Data</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="userActivities">
-      <ion-label>User Activities</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-
-  <ion-card *ngIf="reportType === 'wetlands'">
-    <ion-card-header>
-      <ion-card-title>Wetlands Report</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label>Date Range</ion-label>
-        <ion-datetime display-format="MM/DD/YYYY" [(ngModel)]="startDate"></ion-datetime>
-        <ion-datetime display-format="MM/DD/YYYY" [(ngModel)]="endDate"></ion-datetime>
-      </ion-item>
-      <ion-item>
-        <ion-label>Wetland Name</ion-label>
-        <ion-select [(ngModel)]="selectedWetland">
-          <ion-select-option *ngFor="let wetland of wetlands" [value]="wetland.id">
-            {{ wetland.name }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card *ngIf="reportType === 'userActivities'">
-    <ion-card-header>
-      <ion-card-title>User Activities Report</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label>Date Range</ion-label>
-        <ion-datetime display-format="MM/DD/YYYY" [(ngModel)]="startDate"></ion-datetime>
-        <ion-datetime display-format="MM/DD/YYYY" [(ngModel)]="endDate"></ion-datetime>
-      </ion-item>
-      <ion-item>
-        <ion-label>User</ion-label>
-        <ion-select [(ngModel)]="selectedUser">
-          <ion-select-option *ngFor="let user of users" [value]="user.id">
-            {{ user.username }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-button expand="full" (click)="generateReport()">
-    Generate Report
-  </ion-button>
-
-  <ion-card *ngIf="reportGenerated">
-    <ion-card-header>
-      <ion-card-title>Generated Report</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <pre>{{ reportData | json }}</pre>
-    </ion-card-content>
-  </ion-card> -->
-
-</ion-content>
+  <div>
+    <h3>Wetlands</h3>
+    <p style="color: #333;">Total Wetlands: {{ wetlands.length }}</p>
+    <div *ngIf="wetlands.length > 0; else noWetlands">
+      <ion-card *ngFor="let wetland of wetlands">
+        <ion-card-header>
+          <ion-card-title>{{wetland.wetland_name}}</ion-card-title>
+          <ion-card-subtitle>Type: {{wetland.wetland_type}}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <p>District Name: {{wetland.district}}</p>
+          <p>Wetland Size: {{wetland.wetland_size}}</p>
+          <p>Location Cordinates: {{wetland.location_coordinates}}</p>
+    
+          <p>Conservation Status: {{wetland.conservation_status}}</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <ion-button color="custom" (click)="generateReport()">Generate Report</ion-button>
+  </div>
+  <ng-template #noWetlands>
+    <ion-card>
+      <ion-card-content>
+        <p>No feedback found for this user.</p>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+ </ion-content>

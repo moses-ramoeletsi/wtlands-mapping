@@ -1,4 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { UserFeedbackService } from 'src/app/services/user-feedback.service';
+import { UsersService } from 'src/app/services/users.service';
+import { WetlandsService } from 'src/app/services/wetlands.service';
+import jsPDF from 'jspdf';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-reports',
@@ -6,119 +14,112 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./reports.page.scss'],
 })
 export class ReportsPage implements OnInit {
-  constructor() {}
+  wetlands: any[] = [];
+  savedWetlands: any[] = [];
+  userFeedback: any[] = [];
+  userId: string = '';
 
-  ngOnInit() {}
+  constructor(
+    private wetlandsService: WetlandsService,
+    private usersService: UsersService,
+    private userFeedbackService: UserFeedbackService,
+    private firestore: AngularFirestore,
+    private storage: AngularFireStorage,
+    private auth: AngularFireAuth,
+    private toastController: ToastController
+  ) {}
 
-  reportType?: string;
-  filter = {
-    dateFrom: '',
-    dateTo: '',
-    wetlandId: null,
-    userId: null
-  };
-  wetlands = []; // This would come from your data source
-  users = []; // This would come from your data source
-  reportGenerated = false;
-  reportContent = '';
+  ngOnInit(): void {
+    this.fetchWetlands();
+  }
 
+  fetchWetlands() {
+    this.wetlandsService.fetchWetlandData().subscribe((data: any[]) => {
+      this.wetlands = data;
+    });
+  }
 
+  async generateReport() {
+    try {
+      const user = await this.auth.currentUser;
+      if (!user) {
+        this.presentToast('You must be logged in to save reports.');
+        return;
+      }
 
-  generateReport() {
-    // Example logic for generating a report
-    if (this.reportType === 'wetlands') {
-      this.generateWetlandsReport();
-    } else if (this.reportType === 'user-activities') {
-      this.generateUserActivitiesReport();
+      const doc = new jsPDF();
+      let yOffset = 10;
+
+      const logoUrl = "../../../assets/images/logo.png";
+      const logoWidth = 40;
+      const logoHeight = 40;
+      doc.addImage(logoUrl, 'PNG', 10, yOffset, logoWidth, logoHeight);
+
+      doc.setFontSize(22);
+      doc.setTextColor(0, 100, 0); 
+      doc.text('Leostho Wetlands Mapping', 60, yOffset + 25);
+
+      yOffset += logoHeight + 20;
+
+      doc.setFontSize(18);
+      doc.setTextColor(0, 0, 0); 
+      doc.text('Wetlands Report', 10, yOffset);
+      yOffset += 10;
+
+      doc.setFontSize(12);
+      doc.text(`Total Wetlands: ${this.wetlands.length}`, 10, yOffset);
+      yOffset += 10;
+
+      this.wetlands.forEach((wetland, index) => {
+        if (yOffset > 280) {
+          doc.addPage();
+          yOffset = 10;
+        }
+
+        doc.setFontSize(14);
+        doc.text(`${index + 1}. ${wetland.wetland_name}`, 10, yOffset);
+        yOffset += 7;
+
+        doc.setFontSize(10);
+        doc.text(`Type: ${wetland.wetland_type}`, 15, yOffset);
+        yOffset += 5;
+        doc.text(`District: ${wetland.district}`, 15, yOffset);
+        yOffset += 5;
+        doc.text(`Size: ${wetland.wetland_size}`, 15, yOffset);
+        yOffset += 5;
+        doc.text(`Coordinates: ${wetland.location_coordinates}`, 15, yOffset);
+        yOffset += 5;
+        doc.text(`Conservation Status: ${wetland.conservation_status}`, 15, yOffset);
+        yOffset += 10;
+      });
+
+      const pdfBlob = doc.output('blob');
+      const fileName = `wetlands-report-${new Date().getTime()}.pdf`;
+      const filePath = `reports/${user.uid}/${fileName}`;
+
+      const uploadTask = await this.storage.upload(filePath, pdfBlob);
+      const downloadURL = await uploadTask.ref.getDownloadURL();
+
+      await this.firestore.collection('reports').add({
+        fileName: fileName,
+        createdAt: new Date(),
+        downloadURL: downloadURL,
+        userId: user.uid
+      });
+
+      this.presentToast('Report saved successfully');
+    } catch (error) {
+      console.error('Error saving report:', error);
+      this.presentToast('Error saving report. Please try again.');
     }
-    this.reportGenerated = true;
   }
 
-  generateWetlandsReport() {
-    // Implement your logic to generate the wetlands report
-    this.reportContent = `Wetlands Report from ${this.filter.dateFrom} to ${this.filter.dateTo}`;
-    // Populate with real data
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'bottom'
+    });
+    toast.present();
   }
-
-  generateUserActivitiesReport() {
-    // Implement your logic to generate the user activities report
-    this.reportContent = `User Activities Report from ${this.filter.dateFrom} to ${this.filter.dateTo}`;
-    // Populate with real data
-  }
-
-  downloadReport() {
-    // Logic to download the report as a file (e.g., PDF or CSV)
-    const blob = new Blob([this.reportContent], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'report.docx'; // Change the extension based on the file type
-    a.click();
-    window.URL.revokeObjectURL(url);
-  }
-
-  // reportType: string = 'wetlands';
-  // startDate?: string;
-  // endDate?: string;
-  // selectedWetland?: string;
-  // selectedUser?: string;
-  // reportGenerated: boolean = false;
-  // reportData: any;
-
-  // wetlands = [
-  //   { id: '1', name: 'Wetland 1' },
-  //   { id: '2', name: 'Wetland 2' },
-  // ];
-
-  // users = [
-  //   { id: '1', username: 'User 1' },
-  //   { id: '2', username: 'User 2' },
-  // ];
-
-
-  // generateReport() {
-  //   this.reportGenerated = true;
-
-  //   if (this.reportType === 'wetlands') {
-  //     this.reportData = this.generateWetlandsReport();
-  //   } else if (this.reportType === 'userActivities') {
-  //     this.reportData = this.generateUserActivitiesReport();
-  //   }
-  // }
-
-  // generateWetlandsReport() {
-  //   // Logic to generate wetlands report based on selected filters
-  //   return {
-  //     type: 'Wetlands Data',
-  //     filters: {
-  //       startDate: this.startDate,
-  //       endDate: this.endDate,
-  //       wetland: this.selectedWetland,
-  //     },
-  //     data: [
-  //       // Example data
-  //       { name: 'Wetland 1', size: '100 acres', type: 'Marsh' },
-  //       { name: 'Wetland 2', size: '200 acres', type: 'Swamp' },
-  //     ],
-  //   };
-  // }
-
-  // generateUserActivitiesReport() {
-  //   // Logic to generate user activities report based on selected filters
-  //   return {
-  //     type: 'User Activities',
-  //     filters: {
-  //       startDate: this.startDate,
-  //       endDate: this.endDate,
-  //       user: this.selectedUser,
-  //     },
-  //     data: [
-  //       // Example data
-  //       { username: 'User 1', activity: 'Searched for Wetland 1' },
-  //       { username: 'User 2', activity: 'Saved Wetland 2' },
-  //     ],
-  //   };
-  // }
-
-
 }

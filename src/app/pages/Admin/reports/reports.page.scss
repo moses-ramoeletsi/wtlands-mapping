@@ -2,12 +2,16 @@ ion-content {
     --background: #ebebeb;
 }
 ion-toolbar {
-    --background: transparent;
+  --background: #ebebeb;
     --border-width: 0;
     --padding-top: 0;
     --padding-bottom: 0;
     text-align: center;
     color: #333;
+  }
+  h3 {
+    color: #333;
+    text-align: center;
   }
 
   .back {
@@ -19,6 +23,13 @@ ion-toolbar {
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-right: 8px;
+  }
+  ion-card{
+    --background: #f7f7f7;
+    border: 1px solid #227f43;
+  }
+  ion-card ion-item{
+    --background: #f7f7f7;
   }
   ion-card-title {
     text-align: center;

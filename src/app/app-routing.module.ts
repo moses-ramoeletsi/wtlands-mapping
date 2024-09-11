@@ -75,6 +75,11 @@ const routes: Routes = [
     path: 'wetlands-map',
     loadChildren: () => import('./pages/wetlands-map/wetlands-map.module').then( m => m.WetlandsMapPageModule)
   },
+  {
+    path: 'view-reports',
+    loadChildren: () => import('./pages/Users/view-reports/view-reports.module').then( m => m.ViewReportsPageModule)
+  },
+  
 ];
 
 @NgModule({
