@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Notifications</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-icon class="back" name="arrow-back" routerLink="/user-dashboard"></ion-icon>
+  
+  <ng-container *ngIf="(notifications$ | async) as notifications">
+    <div *ngIf="notifications.length > 0; else noNotifications">
+      <ion-card *ngFor="let notification of notifications">
+        <ion-card-content>
+          <ion-label>
+            <h2>{{ notification.title }}</h2>
+            <p>{{ notification.body }}</p>
+            <p>{{ notification.timestamp.toDate() | date:'medium' }}</p>
+          </ion-label>
+          <ion-item lines="none">
+            <ion-button slot="start" fill="outline" color="custom" (click)="viewWetlandDetails(notification.wetlandInfo)">View Details</ion-button>
+            <ion-icon fill="outline" slot="end" name="trash" color="danger" (click)="deleteNotification(notification.id)"></ion-icon>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    
+    <ng-template #noNotifications>
+      <ion-card>
+        <ion-card-content>
+          <p class="ion-text-center">You have no notifications at this time.</p>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+  </ng-container>
+</ion-content>
