@@ -27,7 +27,10 @@
       <ion-card-content>
         <p>District Name: {{wetland.district}}</p>
         <p>Wetland Size: {{wetland.wetland_size}}</p>
-        <p>Location Cordinates: {{wetland.location_coordinates}}</p>
+        <p>Location Coordinates: 
+          {{wetland.location_coordinates.latitude}}, 
+          {{wetland.location_coordinates.longitude}}
+        </p>
         <p>Conservation Status: {{wetland.conservation_status}}</p>
         
         <ion-button fill="outline" color="custom" (click)="saveWetland(wetland)"><ion-icon   color="custom" name="bookmark"></ion-icon>Save</ion-button>

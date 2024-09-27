@@ -23,9 +23,6 @@ export class UserFeedbackPage implements OnInit {
 
   constructor(
     private userFeedBackServices: UserFeedbackService,
-    private userAuth:  AngularFireAuth, 
-    private fireservices: UsersService,
-    private alertController: AlertController
   ) {}
    loadUserFeedback(uid: string) {
     this.userFeedBackServices.getUserFeedback(this.userFeedback.userId).subscribe(feedback => {

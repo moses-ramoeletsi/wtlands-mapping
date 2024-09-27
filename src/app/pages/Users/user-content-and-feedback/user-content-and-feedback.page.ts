@@ -129,7 +129,7 @@ export class UserContentAndFeedbackPage implements OnInit {
   async deleteuserFeedback(userFeedback: any) {
     const alert = await this.alertController.create({
       header: 'Confirm Delete',
-      message: `Are you sure you want to delete the profile for ${userFeedback.userFeedback_species}?`,
+      message: `Are you sure you want to delete the user feedback for ${userFeedback.feedBackType}?`,
       buttons: [
         {
           text: 'Cancel',

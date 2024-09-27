@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { UserAuthService } from 'src/app/services/user-auth.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -9,21 +11,32 @@ import { UsersService } from 'src/app/services/users.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
-
+export class LoginPage implements OnInit, OnDestroy {
   loginForm!: FormGroup;
-  userLogin = {
-    email: '',
-    password: '',
-  };
+  private logoutSubscription: Subscription;
 
   constructor(
-    public fireservices: UsersService,
+    private authService: UserAuthService,
+    public fireServices: UsersService,
     public alertController: AlertController,
     public router: Router
-  ) {}
+  ) {
+    this.logoutSubscription = this.authService.getLogoutObservable().subscribe(() => {
+      this.resetForm();
+    });
+  }
 
   ngOnInit(): void {
+    this.initForm();
+  }
+
+  ngOnDestroy(): void {
+    if (this.logoutSubscription) {
+      this.logoutSubscription.unsubscribe();
+    }
+  }
+
+  private initForm(): void {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [
@@ -34,27 +47,31 @@ export class LoginPage implements OnInit {
     });
   }
 
+  private resetForm(): void {
+    if (this.loginForm) {
+      this.loginForm.reset();
+    }
+  }
+
   login() {
     if (this.loginForm.valid) {
       const userLogin = this.loginForm.value;
-      this.fireservices
-        .loginWithEmail(userLogin)
-        .then((userDetails) => {
-          const user = userDetails.user;
-  
-          this.fireservices.getUserDetails(user).subscribe((userData: any) => {
-            if (userData && Object.keys(userData).length !== 0) { 
+      this.authService.login(userLogin).then(
+        (userCredential) => {
+          this.fireServices.getUserDetails(userCredential.user).subscribe((userData: any) => {
+            if (userData && Object.keys(userData).length !== 0) {
               if (userData.userType === 'admin') {
-                this.router.navigate(['/admin-dashboard']); 
+                this.router.navigate(['/admin-dashboard']);
               } else {
                 this.router.navigate(['/user-dashboard']);
               }
-            } 
+            }
           });
-        })
-        .catch((error) => {
-          this.showAlert('User Not Found', 'The user does not exist.');
-        });
+        },
+        (error) => {
+          this.showAlert('Login Error', error.message);
+        }
+      );
     } else {
       this.showAlert('Form Error', 'Please check the form fields.');
     }
