@@ -1,3 +1,4 @@
+import { UserAuthService } from 'src/app/services/user-auth.service';
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AlertController, IonModal } from '@ionic/angular';
@@ -28,6 +29,7 @@ export class AdminProfilePage implements OnInit {
   constructor(
     public fireservices: UsersService,
     public afAuth: AngularFireAuth,
+    private userAuth:UserAuthService,
     private alertController: AlertController
   ) {
     this.user = this.afAuth.authState.pipe(
@@ -97,33 +99,25 @@ export class AdminProfilePage implements OnInit {
     await modal.present();
   
   }
-    
-  async deleteuserFeedback(userFeedback: any) {
-  //   const alert = await this.alertController.create({
-  //     header: 'Confirm Delete',
-  //     message: `Are you sure you want to delete the profile for ${userFeedback.userFeedback_species}?`,
-  //     buttons: [
-  //       {
-  //         text: 'Cancel',
-  //         role: 'cancel'
-  //       },
-  //       {
-  //         text: 'Delete',
-  //         handler: async () => {
-  //           try {
-  //             await this.userFeedBackServices.deleteUserFeedback(userFeedback);
-  //             this.showAlert('Success', 'Feedback deleted successfully!');
-  //             this.loadUserFeedback(this.userFeedback.userId);
-  //           } catch (error) {
-  //             this.showAlert('Error', 'Error deleting Feedback!');
-  //           }
-  //         }
-  //       }
-  //     ]
-  //   });
-  
-  //   await alert.present();
-  }
+  async logout() {
+    const alert = await this.alertController.create({
+      header: 'Logout',
+      message: 'Are you sure you want to logout?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Logout',
+          handler: () => {
+            this.userAuth.logout();
+          }
+        }
+      ]
+    });
 
+    await alert.present();
+  }
   
 }

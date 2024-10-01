@@ -19,6 +19,9 @@ ion-toolbar {
   ion-card{
     --background: #f7f7f7;
   }
+  ion-card-header ion-card-title{
+    color: #242424;
+  }
   ion-card ion-item{
     --background: #f7f7f7;
   }

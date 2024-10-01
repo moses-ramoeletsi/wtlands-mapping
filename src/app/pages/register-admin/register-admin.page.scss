@@ -4,9 +4,7 @@ ion-content {
 ion-input {
     color: #333;
 }
-ion-title {
-    color:#333;
-}
+
 h5 {
     color: #227f43;
 }
@@ -16,12 +14,40 @@ a {
 p{
     color: #333;
 }
-
-.register {
-    color:#333;
-    margin-top: 20px;
+:host {
+    --ion-color-primary: #227f43;
+    --ion-color-primary-contrast: #ffffff;
+  }
+.user-register-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
+.app-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--ion-color-primary);
+  margin-bottom: 15px;
+}
+
+.register-form {
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.register {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.error-message {
+  color: #ff4545;
+  font-size: 12px;
+}
 .top-margin {
     margin-top: 8px;
 }

@@ -6,6 +6,7 @@ import { LocalNotifications } from '@capacitor/local-notifications';
 import { AlertController, ToastController } from '@ionic/angular';
 import { UsersService } from 'src/app/services/users.service';
 import { WetlandsService } from 'src/app/services/wetlands.service';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-wetlands',
@@ -13,38 +14,71 @@ import { WetlandsService } from 'src/app/services/wetlands.service';
   styleUrls: ['./wetlands.page.scss'],
 })
 export class WetlandsPage implements OnInit {
-
   wetland = {
     id: '',
-    wetland_name:'',
+    wetland_name: '',
     wetland_type: '',
-    district:'',
-    location_coordinates:'',
-    wetland_size:'',
-    conservation_status:''
-  }
+    district: '',
+    location_coordinates: '',
+    wetland_size: '',
+    conservation_status: ''
+  };
   
   wetlands: any[] = [];
   currentUser: any = null;
   notificationSentWetlands: Set<string> = new Set();
 
   constructor(
-    private wetlandfireserivce: WetlandsService,
+    private wetlandService: WetlandsService,
     private usersService: UsersService,
     private firestore: AngularFirestore,
     private router: Router,
-    private alertController: AlertController, 
-    private toastController: ToastController) { }
+    private alertController: AlertController,
+    private toastController: ToastController
+  ) {}
 
-  ngOnInit() {
+  async requestPermissions() {
+    if (Capacitor.getPlatform() !== 'web') {
+      const notificationPermStatus = await LocalNotifications.requestPermissions();
+      console.log('Notification permission status:', notificationPermStatus.display);
+      if (notificationPermStatus.display !== 'granted') {
+        this.showAlert('Permission Required', 'Please enable notifications to receive updates about nearby wetlands.');
+      }
+  
+      const locationPermStatus = await Geolocation.requestPermissions();
+      console.log('Location permission status:', locationPermStatus.location);
+      if (locationPermStatus.location !== 'granted') {
+        this.showAlert('Permission Required', 'Please enable location services to receive updates about nearby wetlands.');
+      }
+    }
+  }
+  
+  async ngOnInit() {
+    await this.requestPermissions();
+    await this.createNotificationChannel();
     this.getWetlands();
     this.getCurrentUser();
     this.trackUserLocation();
   }
 
+  async createNotificationChannel() {
+    if (Capacitor.getPlatform() === 'android') {
+      await LocalNotifications.createChannel({
+        id: 'wetlands_notifications',
+        name: 'Wetlands Notifications',
+        importance: 5,
+        description: 'Notifications about nearby wetlands',
+        sound: 'beep.wav',
+        vibration: true
+      });
+      console.log('Notification channel created');
+    }
+  }
+
   getWetlands() {
-    this.wetlandfireserivce.fetchWetlandData().subscribe((wetlands) => {
+    this.wetlandService.fetchWetlandData().subscribe((wetlands) => {
       this.wetlands = wetlands;
+      console.log('Fetched wetlands:', this.wetlands);
     });
   }
 
@@ -81,34 +115,35 @@ export class WetlandsPage implements OnInit {
         console.error('Error saving wetland:', error);
         this.showToast('Error saving wetland!');
       });
-
-      console.log('User Name:', this.currentUser.name);
-      console.log('User UID:', this.currentUser.uid);
     } else {
       this.showToast('User not found!');
     }
   }
 
   async trackUserLocation() {
-    const coordinates = await Geolocation.getCurrentPosition();
-    const userLat = coordinates.coords.latitude;
-    const userLng = coordinates.coords.longitude;
-  
-    this.wetlands.forEach((wetland) => {
-      const { latitude: wetlandLat, longitude: wetlandLng } = this.parseCoordinates(wetland.location_coordinates);
-  
-      if (wetlandLat && wetlandLng) {
-        const distance = this.calculateDistance(userLat, userLng, wetlandLat, wetlandLng);
-        if (distance <= 5 && !this.notificationSentWetlands.has(wetland.id)) { // Within 5 km
-          this.sendNotification(wetland);
-          this.notificationSentWetlands.add(wetland.id);
+    try {
+      const coordinates = await Geolocation.getCurrentPosition();
+      const userLat = coordinates.coords.latitude;
+      const userLng = coordinates.coords.longitude;
+      console.log('User location:', userLat, userLng);
+    
+      this.wetlands.forEach((wetland) => {
+        const { latitude: wetlandLat, longitude: wetlandLng } = this.parseCoordinates(wetland.location_coordinates);
+    
+        if (wetlandLat && wetlandLng) {
+          const distance = this.calculateDistance(userLat, userLng, wetlandLat, wetlandLng);
+          console.log(`Distance to ${wetland.wetland_name}: ${distance} km`);
+          if (distance <= 5 && !this.notificationSentWetlands.has(wetland.id)) {
+            this.sendNotification(wetland);
+            this.notificationSentWetlands.add(wetland.id);
+          }
         }
-      } else {
-        console.error('Invalid coordinates for wetland:', wetland);
-      }
-    });
+      });
+    } catch (error) {
+      console.error('Error tracking user location:', error);
+    }
   }
-  
+
   parseCoordinates(coordinates: any): { latitude: number, longitude: number } {
     if (typeof coordinates === 'object' && 'latitude' in coordinates && 'longitude' in coordinates) {
       return { latitude: coordinates.latitude, longitude: coordinates.longitude };
@@ -122,7 +157,7 @@ export class WetlandsPage implements OnInit {
   }
 
   calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
-    const R = 6371; // Earth's radius in kilometers
+    const R = 6371; 
     const dLat = this.deg2rad(lat2 - lat1);
     const dLng = this.deg2rad(lng2 - lng1);
     const a = 
@@ -130,7 +165,7 @@ export class WetlandsPage implements OnInit {
       Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * 
       Math.sin(dLng/2) * Math.sin(dLng/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    const distance = R * c; // Distance in kilometers
+    const distance = R * c; 
     return distance;
   }
 
@@ -160,7 +195,8 @@ export class WetlandsPage implements OnInit {
       }
     };
 
-    // Save notification to Firestore
+    console.log('Attempting to send notification:', notificationData);
+
     try {
       await this.firestore.collection('notifications').add(notificationData);
       console.log('Notification saved to Firestore');
@@ -168,42 +204,42 @@ export class WetlandsPage implements OnInit {
       console.error('Error saving notification to Firestore:', error);
     }
 
-    // Schedule local notification
-    await LocalNotifications.schedule({
-      notifications: [
-        {
-          title: notificationData.title,
-          body: notificationData.body,
-          id: new Date().getTime(),
-          extra: notificationData.wetlandInfo
-        }
-      ]
-    });
+    try {
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: notificationData.title,
+            body: notificationData.body,
+            id: Math.floor(Math.random() * 100000),
+            schedule: { at: new Date(Date.now() + 1000) },
+            extra: notificationData.wetlandInfo,
+            channelId: 'wetlands_notifications'
+          }
+        ]
+      });
+      console.log('Local notification scheduled successfully');
+    } catch (error) {
+      console.error('Error creating notification:', error);
+      try {
+        await LocalNotifications.schedule({
+          notifications: [
+            {
+              title: notificationData.title,
+              body: notificationData.body,
+              id: Math.floor(Math.random() * 100000),
+              extra: notificationData.wetlandInfo,
+              channelId: 'wetlands_notifications'
+            },
+          ],
+        });
+        console.log('Local notification scheduled without custom scheduling');
+      } catch (retryError) {
+        console.error('Error scheduling notification on retry:', retryError);
+      }
+    }
 
     this.showToast(`Notification sent for ${wetland.wetland_name}`);
   }
-
-  // async sendNotification(wetland: any) {
-  //   const { latitude, longitude } = this.parseCoordinates(wetland.location_coordinates);
-  //   await LocalNotifications.schedule({
-  //     notifications: [
-  //       {
-  //         title: `You are near ${wetland.wetland_name}!`,
-  //         body: `This wetland is located in ${wetland.district}. Check the map for more details.`,
-  //         id: new Date().getTime(),
-  //         extra: {
-  //           lat: latitude,
-  //           lng: longitude,
-  //           name: wetland.wetland_name,
-  //           district: wetland.district,
-  //           size: wetland.wetland_size,
-  //           type: wetland.wetland_type
-  //         }
-  //       }
-  //     ]
-  //   });
-  //   this.showToast(`Notification sent for ${wetland.wetland_name}`);
-  // }
 
   viewMap(wetland: any) {
     const { latitude, longitude } = this.parseCoordinates(wetland.location_coordinates);
@@ -221,23 +257,21 @@ export class WetlandsPage implements OnInit {
     } else {
       this.showAlert('Error', 'Invalid coordinates for this wetland.');
     }
-  }  
+  }
 
-  showAlert(title: string, message: string) {
-    this.alertController
-      .create({
-        header: title,
-        message: message,
-        buttons: ['OK'],
-      })
-      .then((alert) => alert.present());
+  async showAlert(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
   async showToast(message: string) {
     const toast = await this.toastController.create({
-      message: message,
-      duration: 2000,
-      position: 'top',
+      message,
+      duration: 2000
     });
     toast.present();
   }

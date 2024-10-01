@@ -1,34 +1,33 @@
 ion-content {
-    --background:#bfb9a9;
+    --background: #ebebeb;
 }
-ion-img{
+
+ion-img {
     display: block;
     height: 250px;
     width: 200px;
     margin: 20px auto;
-   
 }
+
 ion-title {
     margin-top: 10px;
-    color: #333;
+    color: #227f43;
 }
 
 ion-grid {
     display: flex;
     justify-content: center;
-    margin-top: 15px auto;
+    margin-top: 15px;
 }
+
 .custom-color-button {
-    color: #227f43;
-    border-color: #227f43;
-  }
-.primaryColor {
-    --background: var(--ion-color-btn);
-    color: white;
-  }
+    --border-color: #227f43;
+    --color: #227f43;
+    --ion-color-custom: #227f43;
+}
 
 .slogan {
     color: #333;
     text-align: center;
-    margin-top: 10x;
+    margin-top: 10px;
 }
