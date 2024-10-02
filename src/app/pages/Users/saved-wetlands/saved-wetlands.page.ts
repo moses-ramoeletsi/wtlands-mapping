@@ -25,7 +25,7 @@ export class SavedWetlandsPage implements OnInit {
     this.usersService.getAuth().authState.subscribe(user => {
       if (user) {
         this.currentUser = user;
-        this.getSavedWetlands(user.uid); // Fetch saved wetlands for the current user
+        this.getSavedWetlands(user.uid); 
       } else {
         console.log('No user is logged in');
       }

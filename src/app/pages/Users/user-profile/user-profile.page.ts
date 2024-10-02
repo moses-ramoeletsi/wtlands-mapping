@@ -92,7 +92,6 @@ export class UserProfilePage implements OnInit {
   }
   
   async editProfile(modal: IonModal) {  
-    // this.resetForm(modal);
     this.userProfile = {
       uid: this.userProfile.uid, 
       name: this.userProfile.name,

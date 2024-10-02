@@ -12,9 +12,9 @@ export class ViewReportsPage implements OnInit {
   reports$: Observable<any[]>;
 
   constructor(private firestore: AngularFirestore) {
-    this.reports$ = this.firestore.collection('reports', ref => 
-      ref.orderBy('createdAt', 'desc')
-    ).valueChanges();
+    this.reports$ = this.firestore
+      .collection('reports', (ref) => ref.orderBy('createdAt', 'desc'))
+      .valueChanges();
   }
 
   ngOnInit() {}
@@ -25,6 +25,4 @@ export class ViewReportsPage implements OnInit {
     link.download = fileName;
     link.click();
   }
-  
-
 }

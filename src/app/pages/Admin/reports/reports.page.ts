@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { UserFeedbackService } from 'src/app/services/user-feedback.service';
-import { UsersService } from 'src/app/services/users.service';
 import { WetlandsService } from 'src/app/services/wetlands.service';
 import jsPDF from 'jspdf';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
@@ -21,8 +19,6 @@ export class ReportsPage implements OnInit {
 
   constructor(
     private wetlandsService: WetlandsService,
-    private usersService: UsersService,
-    private userFeedbackService: UserFeedbackService,
     private firestore: AngularFirestore,
     private storage: AngularFireStorage,
     private auth: AngularFireAuth,
