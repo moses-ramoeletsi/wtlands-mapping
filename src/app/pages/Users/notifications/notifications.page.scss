@@ -21,41 +21,6 @@ ion-toolbar {
   ion-card ion-item{
     --background: #f7f7f7;
   }
-  ion-modal {
-    --background: transparent;
-  }
-  
-  ion-modal ion-header ion-toolbar ion-img {
-    width: 300px;
-    display: block;
-    margin: 0 auto;
-  }
-  
-  ion-modal ion-item ion-label {
-    color: black;
-  }
-  
-  ion-modal ion-header ion-toolbar {
-    --background: #ebebeb;
-  }
-  
-  ion-modal ion-content {
-    --background: #ebebeb;
-  }
-  
-  ion-modal ion-content form {
-    padding: 20px;
-  }
-  
-  ion-modal ion-content ion-item {
-    margin-bottom: 15px;
-  }
-  
-  ion-modal ion-content ion-button {
-    margin-top: 10px;
-    --background: #227f43;
-    --color: #f0f0f0;
-  }
   
   .back {
     font-size: 24px;

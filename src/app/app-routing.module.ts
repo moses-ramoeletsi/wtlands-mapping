@@ -94,6 +94,10 @@ const routes: Routes = [
     path: 'notifications',
     loadChildren: () => import('./pages/Users/notifications/notifications.module').then( m => m.NotificationsPageModule)
   },
+  {
+    path: 'educational',
+    loadChildren: () => import('./pages/Users/educational/educational.module').then( m => m.EducationalPageModule)
+  },
   
 ];
 
